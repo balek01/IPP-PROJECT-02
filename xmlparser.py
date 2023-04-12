@@ -7,6 +7,7 @@ def xml_parser(sourceFile):
 
     try:
         xml = et.parse(sourceFile)
+
     except et.ParseError:
         e.exit_and_print(e.XML_FORMAT_ERROR)
 
@@ -34,3 +35,4 @@ def xml_parser(sourceFile):
         a.assert_opcode(instruction)
         for arg in instruction:
             a.assert_arg_value_matches_type(arg)
+    return root

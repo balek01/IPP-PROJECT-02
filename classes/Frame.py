@@ -1,13 +1,12 @@
 import typing
 import constants as c
-import Instruction
+from classes.Instruction import Instruction
 
 
 class Frame:
 
-    def __init__(self, scope: int, order: int):
+    def __init__(self, scope: int):
         self.scope = scope
-        self.order = order
         self.instList = []
 
     def add_instr(self, instruction: Instruction) -> None:

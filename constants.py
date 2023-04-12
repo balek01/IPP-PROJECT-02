@@ -2,3 +2,11 @@
 GF = 0
 LF = 1
 TF = 2
+
+BOOL = 1
+INT = 2
+NIL = 3
+STRING = 4
+LABEL = 5
+TYPE = 6
+VAR = 7
