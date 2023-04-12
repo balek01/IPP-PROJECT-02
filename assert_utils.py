@@ -1,5 +1,6 @@
 import errors as e
 import asserts as a
+import re
 
 symbol = ["var", "int", "bool", "string", "float"]
 
@@ -7,12 +8,12 @@ symbol = ["var", "int", "bool", "string", "float"]
 def assert_arithmetic(instruction):
     assert_arg_count(instruction, 3)
     assert_variable(instruction)
-    assert_types_offset(instruction, "int")
+    assert_types_offset(instruction, ["int", "var"])
 
 
 def assert_compare(instruction):
 
-    allowedTypes = ["int", "bool", "string"]
+    allowedTypes = ["int", "bool", "string", "var"]
     assert_arg_count(instruction, 3)
     assert_variable(instruction)
     assert_types_offset(instruction, allowedTypes)
@@ -34,7 +35,7 @@ def assert_not(instruction):
 
 
 def assert_i2ch(instruction):
-    allowedType = "int"
+    allowedType = ["int", "int"]
     assert_arg_count(instruction, 2)
     assert_variable(instruction)
     assert_types_offset(instruction, allowedType)
@@ -43,8 +44,8 @@ def assert_i2ch(instruction):
 def assert_s2i_gchar(instruction):
     assert_arg_count(instruction, 2)
     assert_variable(instruction)
-    assert_types_offset(instruction, "string", 2, 3)
-    assert_types_offset(instruction, "int", 3, 4)
+    assert_types_offset(instruction, ["string", "var"], 2, 3)
+    assert_types_offset(instruction, ["int", "var"], 3, 4)
 
 
 def assert_move(instruction):
@@ -80,22 +81,69 @@ def assert_read(instruction):
 
 
 def assert_concat(instruction):
-    pass
+    allowedTypes = ["string", "var"]
+    assert_arg_count(instruction, 3)
+    assert_variable(instruction)
+    assert_types_offset(instruction, allowedTypes)
 
 
 def assert_schar(instruction):
-    pass
+    assert_arg_count(instruction, 3)
+    assert_variable(instruction)
+    assert_types_offset(instruction, ["int", "var"], 2, 3)
+    assert_types_offset(instruction, ["string", "var"], 3, 4)
 
 
 def assert_jumpif(instruction):
-    pass
+    assert_arg_count(instruction, 3)
+    assert_types_offset(instruction, "label", 0, 1)
+    assert_same_type(instruction, 1)
 
 
 def assert_exit(instruction):
-    pass
+    assert_arg_count(instruction, 1)
+    assert_types_offset(instruction, ["int", "var"], 0)
 
 
-### utils of utils ###
+def assert_arg_value_matches_type(argument):
+    type = argument.attrib.get("type")
+    regex = get_regex(type)
+    #print(type, regex, argument.text)
+    if not re.search(regex, argument.text):
+        e.exit_and_print(e.ASSERT_TYPE_DOESNT_MATCH_VALUE_ERROR)
+
+############################### utils of utils ###############################
+
+
+def get_regex(type):
+
+    var = r'^((LF|GF|TF)@(([_\-;$&%*!?]|[A-Z]|[a-z]|[áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ]))+([_\-$&%*!?]|[A-Z]|[a-z]|[0-9]|[áčďéěíňóřšťůúýžÁČĎÉĚÍŇÓŘŠŤŮÚÝŽ])*)$'
+    int = r"^([-+]?\d+)$"
+    bool = r'(^(false|true)$)'
+    label = r'^([_\-$&%*!?]|[A-Z]|[a-z]|[0-9])+$'
+    str = r'^(?:[^\\#\s]|\\(?:0[0-9]{2}|1[0-9]{2}|2[0-9][0-9]|3[0-2]|[35]5|92))*$'
+    nil = r'^nil$'
+    typeregex = r'^(int|string|bool|nil|label)$'
+
+    match type:
+        case 'int':
+            return int
+        case 'bool':
+            return bool
+        case 'label':
+            return label
+        case 'string':
+            return str
+        case 'var':
+            return var
+        case 'nil':
+            return nil
+        case 'type':
+            return typeregex
+        case _:
+            e.exit_and_print(e.INTERNAL_ERROR)
+
+
 def assert_opcode(instruction):
     assert_attribute(instruction, "opcode")
     a.assert_opcode_value(instruction)
@@ -133,7 +181,6 @@ def assert_types_offset(instruction, types, fromoffset=1, toffset=None):
 
     for arg in instruction[fromoffset:toffset]:
         assert_types(arg, types)
-    pass
 
 
 def assert_types(arg, types):
@@ -152,13 +199,17 @@ def assert_types(arg, types):
 
 def assert_variable(instruction):
     assert_types(instruction[0], "var")
-    pass
 
 
-def assert_same_type(instruction, offset):
+def assert_same_type(instruction, offset, nil=False):
     types = set()
-
+    var = False
     for arg in instruction[offset:]:
+        val = arg.attrib.get("type")
+        if val == "var":
+            var = True
+        if nil and val == "nil":
+            var = True
         types.add(arg.attrib.get("type"))
-    if len(types) > 1:
+    if not var and len(types) > 1:
         e.exit_and_print(e.ASSERT_SAME_TYPE_ERROR)

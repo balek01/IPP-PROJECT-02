@@ -29,7 +29,8 @@ def xml_parser(sourceFile):
 
         if ordervalue in order or ordervalue < 1:
             e.exit_and_print(e.ASSERT_ORDER_VALUE_ERROR)
+
         order.add(ordervalue)
         a.assert_opcode(instruction)
-      #  for arg in instruction:
-        #  a.assert_arg(arg)
+        for arg in instruction:
+            a.assert_arg_value_matches_type(arg)
