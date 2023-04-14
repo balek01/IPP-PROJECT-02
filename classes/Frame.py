@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import constants as c
 from classes.Instruction import Instruction
 from classes.Variable import Variable
@@ -17,7 +17,7 @@ class Frame:
     def add_var(self, variable: Variable) -> None:
         self.var_list.append(variable)
 
-    def get_variable_by_name(self, name: str) -> Variable:
+    def get_variable_by_name(self, name: str) -> Optional[Variable]:
         for v in self.var_list:
             if v.name == name:
                 return v
