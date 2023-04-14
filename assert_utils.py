@@ -35,7 +35,7 @@ def assert_not(instruction):
 
 
 def assert_i2ch(instruction):
-    allowedType = ["int", "int"]
+    allowedType = ["int", "var"]
     assert_arg_count(instruction, 2)
     assert_variable(instruction)
     assert_types_offset(instruction, allowedType)
