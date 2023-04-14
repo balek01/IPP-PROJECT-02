@@ -38,6 +38,8 @@ def set_labels(instruction, labels: dict):
         if label not in labels:
             order = int(instruction.attrib.get("order"))
             labels[label] = order
+        else:
+            e.exit_and_print(e.SEMANTIC_LABEL_ALREADY_EXISTS)
 
 
 def create_instruction(instruction):
