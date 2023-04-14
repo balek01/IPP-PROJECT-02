@@ -25,12 +25,6 @@ def run(interpret, xml):
     interpret.run()
 
 
-def init():
-    interpret = Interpret()
-    g_frame = Frame(c.GF)
-    return interpret, g_frame
-
-
 def setup_labels(xml):
     labels = {}
     for instruction in xml:
@@ -100,7 +94,7 @@ def main():
     inputfile, sourcefile = parse_args()
     xml = xp.xml_parser(sourcefile)
     setup_labels(xml)
-    interpret, g_frame = init()
+    interpret = Interpret()
     run(interpret, xml)
 
 
