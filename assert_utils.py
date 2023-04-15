@@ -42,7 +42,7 @@ def assert_i2ch(instruction):
 
 
 def assert_s2i_gchar(instruction):
-    assert_arg_count(instruction, 2)
+    assert_arg_count(instruction, 3)
     assert_variable(instruction)
     assert_types_offset(instruction, ["string", "var"], 2, 3)
     assert_types_offset(instruction, ["int", "var"], 3, 4)
@@ -109,6 +109,8 @@ def assert_arg_value_matches_type(argument):
     type = argument.attrib.get("type")
     regex = get_regex(type)
     #print(type, regex, argument.text)
+    if argument.text is None:
+        argument.text = ""
     if not re.search(regex, argument.text):
         e.exit_and_print(e.ASSERT_TYPE_DOESNT_MATCH_VALUE_ERROR)
 

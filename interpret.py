@@ -75,12 +75,16 @@ def str_to_type(str):
             e.exit_and_print(e.INTERNAL_ERROR)
 
 
-def value_to_type(type, value):
+def value_to_type(type, value: str):
+
     match type:
         case c.STRING | c.LABEL | c.VAR:
             return value
         case c.BOOL:
-            return bool(value)
+            if value == 'true':
+                return True
+            else:
+                return False
         case c.INT:
             return int(value)
         case c.NIL:

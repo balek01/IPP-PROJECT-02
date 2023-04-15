@@ -1,4 +1,5 @@
 ##FRAMES##
+import sys
 GF = 0
 LF = 1
 TF = 2
@@ -23,3 +24,17 @@ ADD = 0
 SUB = 1
 IDIV = 2
 MUL = 3
+
+##COMAPRSION OPERATIONS##
+GT = 0
+LT = 1
+EQ = 2
+
+##LOGICAL OPERATIONS####
+AND = 0
+OR = 1
+NOT = 2
+
+## OUTPUT ##
+WRITE = sys.stdout
+DPRINT = sys.stderr
