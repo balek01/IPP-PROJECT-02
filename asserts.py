@@ -17,8 +17,11 @@ def assert_opcode_value(instruction):
             au.assert_not(instruction)
         case 'INT2CHAR':
             au.assert_i2ch(instruction)
-        case 'TYPE' | 'STRLEN':
+        case 'TYPE':
             # TODO:
+            pass
+        case 'STRLEN':
+            # TODO
             pass
         case 'STRI2INT' | 'GETCHAR':
             au.assert_s2i_gchar(instruction)

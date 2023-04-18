@@ -23,9 +23,3 @@ class Frame:
         self.scope = scope
         for var in self.var_list:
             var.change_name_scope_to(scope)
-
-    def pop_frame(self) -> None:
-        self.scope = c.TF
-
-    def push_frame(self) -> None:
-        self.scope = c.LF

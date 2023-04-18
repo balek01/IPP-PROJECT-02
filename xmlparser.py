@@ -3,15 +3,18 @@ import errors as e
 import assert_utils as a
 
 
-def xml_parser(sourceFile):
+def xml_parser(sourceFile, is_file):
 
     try:
-        xml = et.parse(sourceFile)
+        if is_file:
+            xml = et.parse(sourceFile)
+            root = xml.getroot()
+        else:
+            root = et.fromstring(sourceFile)
 
     except et.ParseError:
         e.exit_and_print(e.XML_FORMAT_ERROR)
 
-    root = xml.getroot()
     try:
         root[:] = sorted(root, key=lambda child: int(child.get('order', 1)))
     except ValueError:

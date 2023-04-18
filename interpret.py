@@ -1,5 +1,7 @@
+import sys
 from parseargs import parse_args
 import xmlparser as xp
+import xml.etree.ElementTree as ET
 from classes.Interpret import Interpret
 from classes.Instruction import Instruction
 from classes.Argument import Argument
@@ -98,8 +100,15 @@ def value_to_type(type, value: str):
 
 def main():
 
-    inputfile, sourcefile = parse_args()
-    xml = xp.xml_parser(sourcefile)
+    inputfile, source = parse_args()
+    if source is None:
+        is_file = False
+        source = sys.stdin.read()
+    else:
+        is_file = True
+
+    xml = xp.xml_parser(source, is_file)
+
     labels = setup_labels(xml)
     interpret = Interpret(labels, inputfile)
     prerun(interpret, xml)

@@ -110,13 +110,16 @@ class Interpret:
                 e.exit_and_print(e.SEMANTIC_VAR_ALREADY_EXISTS)
             else:
                 self.g_frame.add_var(Variable(name, None, None))
-
-        # TODO: CORRECT ASSERTION
-        if frame.scope == c.TF or frame.scope == c.LF:
+        if frame.scope == c.TF:
             if(self.t_frame.get_variable_by_name(name)):
                 e.exit_and_print(e.SEMANTIC_VAR_ALREADY_EXISTS)
             else:
                 self.t_frame.add_var(Variable(name, None, None))
+        if frame.scope == c.LF:
+            if(self.l_frame.get_variable_by_name(name)):
+                e.exit_and_print(e.SEMANTIC_VAR_ALREADY_EXISTS)
+            else:
+                self.l_frame.add_var(Variable(name, None, None))
 
     def __exit(self, i: Instruction):
         arg0: Argument = i.arglist[c.POS_VARIABLE]
