@@ -5,9 +5,9 @@ import os
 
 def parse_args():
     ap = argparse.ArgumentParser(
-        prog='IPPCODE23INTERPRET',
-        description="Moc popis kodu",
-        epilog='Text at the bottom of help',
+        prog='interpret.py',
+        description="IPPCODE23 INTERPRET",
+        epilog='Atleast one of input files must be sepecified.',
         exit_on_error=False)
 
     ap.add_argument("--source", required=False, help="source XML file ")
@@ -17,7 +17,7 @@ def parse_args():
         args = ap.parse_args()
     except Exception:
         e.exit_and_print(e.ARG_ERROR)
- 
+
     if not args.input and not args.source:
         e.exit_and_print(e.ARG_ERROR)
 

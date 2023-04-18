@@ -2,7 +2,7 @@ import errors as e
 import asserts as a
 import re
 
-symbol = ["var", "int", "bool", "string", "float"]
+symbol = ["var", "int", "bool", "string", "float", "nil"]
 
 
 def assert_arithmetic(instruction):
@@ -51,7 +51,7 @@ def assert_s2i_gchar(instruction):
 def assert_move(instruction):
     assert_arg_count(instruction, 2)
     assert_variable(instruction)
-    assert_types_offset(instruction, symbol, 2)
+    assert_types_offset(instruction, symbol, 1)
 
 
 def assert_only_var(instruction):
@@ -71,7 +71,7 @@ def assert_only_sym(instruction):
 def assert_only_label(instruction):
     allowedType = "label"
     assert_arg_count(instruction, 1)
-    assert_types_offset(instruction, allowedType)
+    assert_types_offset(instruction, allowedType, 0)
 
 
 def assert_read(instruction):
@@ -90,8 +90,8 @@ def assert_concat(instruction):
 def assert_schar(instruction):
     assert_arg_count(instruction, 3)
     assert_variable(instruction)
-    assert_types_offset(instruction, ["int", "var"], 2, 3)
-    assert_types_offset(instruction, ["string", "var"], 3, 4)
+    assert_types_offset(instruction, ["int", "var"], 1, 2)
+    assert_types_offset(instruction, ["string", "var"], 2, 3)
 
 
 def assert_jumpif(instruction):
@@ -189,10 +189,8 @@ def assert_types(arg, types):
     assert_attribute(arg, "type")
     if isinstance(types, str):
         types = [types]
-
     error = True
     for type in types:
-
         if arg.attrib.get("type") == type:
             error = False
     if error:

@@ -8,11 +8,7 @@ class Frame:
 
     def __init__(self, scope: int):
         self.scope = scope
-        self.inst_list: List[Instruction] = []
         self.var_list: List[Variable] = []
-
-    def add_instr(self, instruction: Instruction) -> None:
-        self.inst_list.append(instruction)
 
     def add_var(self, variable: Variable) -> None:
         self.var_list.append(variable)
@@ -22,6 +18,11 @@ class Frame:
             if v.name == name:
                 return v
         return None
+
+    def change_scope_to(self, scope: int) -> None:
+        self.scope = scope
+        for var in self.var_list:
+            var.change_name_scope_to(scope)
 
     def pop_frame(self) -> None:
         self.scope = c.TF

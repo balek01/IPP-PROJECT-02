@@ -29,6 +29,7 @@ MUL = 3
 GT = 0
 LT = 1
 EQ = 2
+NEQ =3
 
 ##LOGICAL OPERATIONS####
 AND = 0

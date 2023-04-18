@@ -8,8 +8,9 @@ import constants as c
 import errors as e
 
 
-def run(interpret, xml):
+def prerun(interpret, xml):
     instruction = xml[0]
+
     last_instruction = create_instruction(instruction)
 
     for instruction in xml:
@@ -22,19 +23,19 @@ def run(interpret, xml):
         last_instruction.next_instr = new_instruction
         last_instruction = new_instruction
         interpret.add_instruction(new_instruction)
-    interpret.run()
 
 
 def setup_labels(xml):
     labels = {}
     for instruction in xml:
-        set_labels(instruction, labels)
+        set_label(instruction, labels)
+    return labels
 
 
-def set_labels(instruction, labels: dict):
+def set_label(instruction, labels: dict):
     opcode = instruction.attrib.get("opcode").upper()
     if opcode == "LABEL":
-        label = instruction.text
+        label = instruction.find('*').text
         if label not in labels:
             order = int(instruction.attrib.get("order"))
             labels[label] = order
@@ -99,9 +100,10 @@ def main():
 
     inputfile, sourcefile = parse_args()
     xml = xp.xml_parser(sourcefile)
-    setup_labels(xml)
-    interpret = Interpret()
-    run(interpret, xml)
+    labels = setup_labels(xml)
+    interpret = Interpret(labels, inputfile)
+    prerun(interpret, xml)
+    interpret.run()
 
 
 if __name__ == '__main__':
