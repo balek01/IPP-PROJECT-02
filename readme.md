@@ -1,6 +1,7 @@
 Implementační dokumentace k 2. úloze do IPP 2022/2023
 Jméno a příjmení: Miroslav Bálek
-Login: xbalek02
+
+Hodnocení: 8/12
 
 Skript interpret.py
 
