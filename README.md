@@ -1,1 +1,0 @@
-# IPP-PROJECT-02
